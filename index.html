@@ -1,11 +1,17 @@
-<!--         Stop fucking around in the source, you aren't going to find anything (important).         -->
+<!--         Stop fucking around in the source, you aren't going to find anything (of great importance). Except maybe some HINT comments.         -->
 <html>
   <head>
     <link href='//fonts.googleapis.com/css?family=Cousine' rel='stylesheet' type='text/css'>
     <script src='//code.jquery.com/jquery-2.1.1.min.js'></script>
-    <script src='aes.js'></script>
+    <script src='tea.js'></script>
     <script>
-      var msgs = [];
+      var msgs = {
+        '01':''
+      };
+      function clueDecrypt(){
+        var passKeyVal = $('#keybox'), clueVal = $('#cluebox');
+        decrypt(msgs[clueVal],passKeyVal);
+      }
       $("#keybox").keyup(function(event){
           if(event.keyCode == 13){
               $("#go").click();
@@ -16,9 +22,9 @@
               $("#go").click();
           }
       });
-      //$('#go').click(function(){
-        
-      //});
+      $('#go').click(function(){
+        clueDecrypt();
+      });
     </script>
     <style>
       *{
@@ -34,12 +40,13 @@
     Hello. This is F8C7A6. You are obviously here for a reason. I assume you mean to use this:
   </div>
   <div>
-    <input type=text id='keybox' placeholder="Enter Key from Clue"></input>
+    <input type=text id='keybox' placeholder="Enter Passkey from Clue"></input>
     <input type=text id='cluebox' placeholder="Enter Clue Number (two digits)"></input>
     <input type=button id='go' name='Go'></input>
   </div>
   <div id='outpsg'>
-    View the source of this page to see comments in the HTML file.
+    To use the decyption tool, enter the passkey from the clue you received and the clue number which you received. This not only grants you access to an online copy of clues, but also repels impostors.
+    Don't forget to view the source of this page to see comments in the HTML file.
   </div>
 <html>
-<!--          Hint - You never would expect that I would make a website. I may have enlisted some help.      -->
+<!--          Hint - I have added some simplification to the code on this page to allow you to understand it better.      -->
