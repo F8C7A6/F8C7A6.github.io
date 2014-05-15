@@ -10,7 +10,7 @@
       };
       function clueDecrypt(){
         var passKeyVal = $('#keybox').val(), clueVal = $('#cluebox').val().toUpperCase();
-        $("#outpsg").val(decrypt(msgs[clueVal],passKeyVal));
+        $("#outpsg").text(decrypt(msgs[clueVal],passKeyVal));
       }
       $("#keybox").keyup(function(event){
           if(event.keyCode == 13){
