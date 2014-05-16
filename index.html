@@ -16,16 +16,13 @@
       
       $("#keybox").keyup(function(event){
           if(event.keyCode == 13){
-              $("#go").click();
+              clueDecrypt();
           }
       });
       $("#cluebox").keyup(function(event){
           if(event.keyCode == 13){
-              $("#go").click();
+              clueDecrypt();
           }
-      });
-      $('#go').click(function(){
-        clueDecrypt();
       });
     </script>
     <style>
@@ -54,7 +51,7 @@
     <div><input type=text id='keybox' placeholder="Enter Passkey from Clue"></input></div>
     <div><input type=text id='cluebox' placeholder="Enter Clue Number (two digits)"></input></div>
   </div>
-    <div id='go'>Go</div>
+    <div id='go' onclick="clueDecrypt();">Go</div>
   <div id='outpsg' class='.n'>
     To use the decyption tool, enter the passkey from the clue you received and the clue number which you received. This not only grants you access to an online copy of clues, but also repels impostors.
     Don't forget to view the source of this page to see comments in the HTML file.
