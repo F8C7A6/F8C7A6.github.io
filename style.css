@@ -1,0 +1,14 @@
+*{
+  font-family: 'Cousine';
+}
+.n{
+  width:100%;
+}
+#go{
+  border:2px solid black;
+  text-align:center;
+  width:5%;
+}
+input{
+  width:20%;
+}
