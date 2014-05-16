@@ -11,8 +11,7 @@
       };
       
       function clueDecrypt(){
-        var passKeyVal = $('#keybox').val(), clueVal = $('#cluebox').val().toUpperCase();
-        $("#outpsg").html($.parseHTML(decrypt(msgs[clueVal],passKeyVal)));
+        $("#outpsg").html($.parseHTML(decrypt(msgs[$('#cluebox').val()],$('#keybox').val())));
       }
       
       $("#keybox").keyup(function(event){
