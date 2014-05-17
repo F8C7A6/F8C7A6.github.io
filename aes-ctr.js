@@ -1,1 +1,150 @@
-eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--){d[e(c)]=k[c]||e(c)}k=[function(e){return d[e]}];e=function(){return'\\w+'};c=1};while(c--){if(k[c]){p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c])}}return p}('9.G={};9.G.18=P(e,h,f){3 a=16;M(!(f==N||f==U||f==W))B\'\';e=C.y(e);h=C.y(h);3 k=f/8;3 l=d j(k);5(3 i=0;i<k;i++){l[i]=11(h.m(i))?0:h.m(i)}3 g=9.D(l,9.w(l));g=g.Z(g.v(0,k-16));3 7=d j(a);3 E=(d 13()).17();3 Q=E%T;3 R=q.O(E/T);3 S=q.O(q.12()*19);5(3 i=0;i<2;i++)7[i]=(Q>>>i*8)&n;5(3 i=0;i<2;i++)7[i+2]=(S>>>i*8)&n;5(3 i=0;i<4;i++)7[i+4]=(R>>>i*8)&n;3 s=\'\';5(3 i=0;i<8;i++)s+=J.I(7[i]);3 A=9.w(g);3 t=q.V(e.o/a);3 L=d j(t);5(3 b=0;b<t;b++){5(3 c=0;c<4;c++)7[15-c]=(b>>>c*8)&n;5(3 c=0;c<4;c++)7[15-c-4]=(b/Y>>>c*8)3 z=9.D(7,A);3 K=b<t-1?a:(e.o-1)%a+1;3 r=d j(K);5(3 i=0;i<K;i++){r[i]=z[i]^e.m(b*a+i);r[i]=J.I(r[i])}L[b]=r.x(\'\')}3 6=s+L.x(\'\');6=10.y(6);B 6}9.G.14=P(6,h,f){3 a=16;M(!(f==N||f==U||f==W))B\'\';6=10.X(6);h=C.y(h);3 k=f/8;3 l=d j(k);5(3 i=0;i<k;i++){l[i]=11(h.m(i))?0:h.m(i)}3 g=9.D(l,9.w(l));g=g.Z(g.v(0,k-16));3 7=d j(8);s=6.v(0,8);5(3 i=0;i<8;i++)7[i]=s.m(i);3 A=9.w(g);3 u=q.V((6.o-8)/a);3 H=d j(u);5(3 b=0;b<u;b++)H[b]=6.v(8+b*a,8+b*a+a);6=H;3 F=d j(6.o);5(3 b=0;b<u;b++){5(3 c=0;c<4;c++)7[15-c]=((b)>>>c*8)&n;5(3 c=0;c<4;c++)7[15-c-4]=(((b+1)/Y-1)>>>c*8)&n;3 z=9.D(7,A);3 p=d j(6[b].o);5(3 i=0;i<6[b].o;i++){p[i]=z[i]^6[b].m(i);p[i]=J.I(p[i])}F[b]=p.x(\'\')}3 e=F.x(\'\');e=C.X(e);B e}',62,72,'|||var||for|ciphertext|counterBlock||Aes|blockSize|||new|plaintext|nBits|key|password||Array|nBytes|pwBytes|charCodeAt|0xff|length|plaintxtByte|Math|cipherChar|ctrTxt|blockCount|nBlocks|slice|keyExpansion|join|encode|cipherCntr|keySchedule|return|Utf8|cipher|nonce|plaintxt|Ctr|ct|fromCharCode|String|blockLength|ciphertxt|if|128|floor|function|nonceMs|nonceSec|nonceRnd|1000|192|ceil|256|decode|0x100000000|concat|Base64|isNaN|random|Date|decrypt|||getTime|encrypt|0xffff'.split('|'),0,{}));
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
+/*  AES Counter-mode implementation in JavaScript (c) Chris Veness 2005-2014                      */
+/*   - see http://csrc.nist.gov/publications/nistpubs/800-38a/sp800-38a.pdf                       */
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
+
+Aes.Ctr = {};  // Aes.Ctr namespace: a subclass or extension of Aes
+
+/**
+ * Encrypt a text using AES encryption in Counter mode of operation
+ *
+ * Unicode multi-byte character safe
+ *
+ * @param {String} plaintext Source text to be encrypted
+ * @param {String} password  The password to use to generate a key
+ * @param {Number} nBits     Number of bits to be used in the key (128, 192, or 256)
+ * @returns {string}         Encrypted text
+ */
+Aes.Ctr.encrypt = function(plaintext, password, nBits) {
+    var blockSize = 16;  // block size fixed at 16 bytes / 128 bits (Nb=4) for AES
+    if (!(nBits==128 || nBits==192 || nBits==256)) return '';  // standard allows 128/192/256 bit keys
+    plaintext = Utf8.encode(plaintext);
+    password = Utf8.encode(password);
+    //var t = new Date();  // timer
+
+    // use AES itself to encrypt password to get cipher key (using plain password as source for key
+    // expansion) - gives us well encrypted key (though hashed key might be preferred for prod'n use)
+    var nBytes = nBits/8;  // no bytes in key (16/24/32)
+    var pwBytes = new Array(nBytes);
+    for (var i=0; i<nBytes; i++) {  // use 1st 16/24/32 chars of password for key
+        pwBytes[i] = isNaN(password.charCodeAt(i)) ? 0 : password.charCodeAt(i);
+    }
+    var key = Aes.cipher(pwBytes, Aes.keyExpansion(pwBytes));  // gives us 16-byte key
+    key = key.concat(key.slice(0, nBytes-16));  // expand key to 16/24/32 bytes long
+
+    // initialise 1st 8 bytes of counter block with nonce (NIST SP800-38A §B.2): [0-1] = millisec,
+    // [2-3] = random, [4-7] = seconds, together giving full sub-millisec uniqueness up to Feb 2106
+    var counterBlock = new Array(blockSize);
+
+    var nonce = (new Date()).getTime();  // timestamp: milliseconds since 1-Jan-1970
+    var nonceMs = nonce%1000;
+    var nonceSec = Math.floor(nonce/1000);
+    var nonceRnd = Math.floor(Math.random()*0xffff);
+
+    for (var i=0; i<2; i++) counterBlock[i]   = (nonceMs  >>> i*8) & 0xff;
+    for (var i=0; i<2; i++) counterBlock[i+2] = (nonceRnd >>> i*8) & 0xff;
+    for (var i=0; i<4; i++) counterBlock[i+4] = (nonceSec >>> i*8) & 0xff;
+
+    // and convert it to a string to go on the front of the ciphertext
+    var ctrTxt = '';
+    for (var i=0; i<8; i++) ctrTxt += String.fromCharCode(counterBlock[i]);
+
+    // generate key schedule - an expansion of the key into distinct Key Rounds for each round
+    var keySchedule = Aes.keyExpansion(key);
+
+    var blockCount = Math.ceil(plaintext.length/blockSize);
+    var ciphertxt = new Array(blockCount);  // ciphertext as array of strings
+
+    for (var b=0; b<blockCount; b++) {
+        // set counter (block #) in last 8 bytes of counter block (leaving nonce in 1st 8 bytes)
+        // done in two stages for 32-bit ops: using two words allows us to go past 2^32 blocks (68GB)
+        for (var c=0; c<4; c++) counterBlock[15-c] = (b >>> c*8) & 0xff;
+        for (var c=0; c<4; c++) counterBlock[15-c-4] = (b/0x100000000 >>> c*8)
+
+        var cipherCntr = Aes.cipher(counterBlock, keySchedule);  // -- encrypt counter block --
+
+        // block size is reduced on final block
+        var blockLength = b<blockCount-1 ? blockSize : (plaintext.length-1)%blockSize+1;
+        var cipherChar = new Array(blockLength);
+
+        for (var i=0; i<blockLength; i++) {  // -- xor plaintext with ciphered counter char-by-char --
+                cipherChar[i] = cipherCntr[i] ^ plaintext.charCodeAt(b*blockSize+i);
+                cipherChar[i] = String.fromCharCode(cipherChar[i]);
+        }
+        ciphertxt[b] = cipherChar.join('');
+    }
+
+    // Array.join is more efficient than repeated string concatenation in IE
+    var ciphertext = ctrTxt + ciphertxt.join('');
+    ciphertext = Base64.encode(ciphertext);  // encode in base64
+
+    //alert((new Date()) - t);
+    return ciphertext;
+}
+
+/**
+ * Decrypt a text encrypted by AES in counter mode of operation
+ *
+ * @param {String} ciphertext Source text to be encrypted
+ * @param {String} password   The password to use to generate a key
+ * @param {Number} nBits      Number of bits to be used in the key (128, 192, or 256)
+ * @returns {String}          Decrypted text
+ */
+Aes.Ctr.decrypt = function(ciphertext, password, nBits) {
+    var blockSize = 16;  // block size fixed at 16 bytes / 128 bits (Nb=4) for AES
+    if (!(nBits==128 || nBits==192 || nBits==256)) return '';  // standard allows 128/192/256 bit keys
+    ciphertext = Base64.decode(ciphertext);
+    password = Utf8.encode(password);
+    //var t = new Date();  // timer
+
+    // use AES to encrypt password (mirroring encrypt routine)
+    var nBytes = nBits/8;  // no bytes in key
+    var pwBytes = new Array(nBytes);
+    for (var i=0; i<nBytes; i++) {
+        pwBytes[i] = isNaN(password.charCodeAt(i)) ? 0 : password.charCodeAt(i);
+    }
+    var key = Aes.cipher(pwBytes, Aes.keyExpansion(pwBytes));
+    key = key.concat(key.slice(0, nBytes-16));  // expand key to 16/24/32 bytes long
+
+    // recover nonce from 1st 8 bytes of ciphertext
+    var counterBlock = new Array(8);
+    ctrTxt = ciphertext.slice(0, 8);
+    for (var i=0; i<8; i++) counterBlock[i] = ctrTxt.charCodeAt(i);
+
+    // generate key schedule
+    var keySchedule = Aes.keyExpansion(key);
+
+    // separate ciphertext into blocks (skipping past initial 8 bytes)
+    var nBlocks = Math.ceil((ciphertext.length-8) / blockSize);
+    var ct = new Array(nBlocks);
+    for (var b=0; b<nBlocks; b++) ct[b] = ciphertext.slice(8+b*blockSize, 8+b*blockSize+blockSize);
+    ciphertext = ct;  // ciphertext is now array of block-length strings
+
+    // plaintext will get generated block-by-block into array of block-length strings
+    var plaintxt = new Array(ciphertext.length);
+
+    for (var b=0; b<nBlocks; b++) {
+        // set counter (block #) in last 8 bytes of counter block (leaving nonce in 1st 8 bytes)
+        for (var c=0; c<4; c++) counterBlock[15-c] = ((b) >>> c*8) & 0xff;
+        for (var c=0; c<4; c++) counterBlock[15-c-4] = (((b+1)/0x100000000-1) >>> c*8) & 0xff;
+
+        var cipherCntr = Aes.cipher(counterBlock, keySchedule);  // encrypt counter block
+
+        var plaintxtByte = new Array(ciphertext[b].length);
+        for (var i=0; i<ciphertext[b].length; i++) {
+            // -- xor plaintxt with ciphered counter byte-by-byte --
+            plaintxtByte[i] = cipherCntr[i] ^ ciphertext[b].charCodeAt(i);
+            plaintxtByte[i] = String.fromCharCode(plaintxtByte[i]);
+        }
+        plaintxt[b] = plaintxtByte.join('');
+    }
+
+    // join array of blocks into single plaintext string
+    var plaintext = plaintxt.join('');
+    plaintext = Utf8.decode(plaintext);  // decode from UTF8 back to Unicode multi-byte chars
+
+    //alert((new Date()) - t);
+    return plaintext;
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
