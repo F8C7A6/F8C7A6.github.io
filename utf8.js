@@ -1,1 +1,63 @@
-eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--){d[e(c)]=k[c]||e(c)}k=[function(e){return d[e]}];e=function(){return'\\w+'};c=1};while(c--){if(k[c]){p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c])}}return p}('l n={};n.z="R+/=";n.J=D(m,q){q=(E q==\'H\')?G:q;l b,g,j,9,o,k,i,h,e=[],u=\'\',c,7,5;l a=n.z;7=q?v.J(m):m;c=7.r%3;A(c>0){Q(c++<3){u+=\'=\';7+=\'\\0\'}}F(c=0;c<7.r;c+=3){b=7.w(c);g=7.w(c+1);j=7.w(c+2);9=b<<K|g<<8|j;o=9>>N&t;k=9>>M&t;i=9>>6&t;h=9&t;e[c/3]=a.f(o)+a.f(k)+a.f(i)+a.f(h)}5=e.O(\'\');5=5.P(0,5.r-u.r)+u;I 5}n.B=D(m,p){p=(E p==\'H\')?G:p;l b,g,j,o,k,i,h,9,d=[],7,5;l a=n.z;5=p?v.B(m):m;F(l c=0;c<5.r;c+=4){o=a.s(5.f(c));k=a.s(5.f(c+1));i=a.s(5.f(c+2));h=a.s(5.f(c+3));9=o<<N|k<<M|i<<6|h;b=9>>>K&x;g=9>>>8&x;j=9&x;d[c/4]=C.y(b,g,j);A(h==L)d[c/4]=C.y(b,g);A(i==L)d[c/4]=C.y(b)}7=d.O(\'\');I p?v.B(7):7}',54,54,'|||||coded||plain||bits|b64|o1||||charAt|o2|h4|h3|o3|h2|var|str|Base64|h1|utf8decode|utf8encode|length|indexOf|0x3f|pad|Utf8|charCodeAt|0xff|fromCharCode|code|if|decode|String|function|typeof|for|false|undefined|return|encode|16|0x40|12|18|join|slice|while|ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'.split('|'),0,{}));
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
+/*  Utf8 class: encode / decode between multi-byte Unicode characters and UTF-8 multiple          */
+/*              single-byte character encoding (c) Chris Veness 2002-2011                         */
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
+
+/* changelog 
+ * 2010-09-29: fixed decode order of operation to avoid falsely recognising decoded string as 3-byte 
+ *             utf-8 charaacter
+ */
+
+var Utf8 = {};  // Utf8 namespace
+
+/**
+ * Encode multi-byte Unicode string into utf-8 multiple single-byte characters 
+ * (BMP / basic multilingual plane only)
+ *
+ * Chars in range U+0080 - U+07FF are encoded in 2 chars, U+0800 - U+FFFF in 3 chars
+ *
+ * @param {String} strUni Unicode string to be encoded as UTF-8
+ * @returns {String} encoded string
+ */
+Utf8.encode = function(strUni) {
+  // use regular expressions & String.replace callback function for better efficiency 
+  // than procedural approaches
+  var strUtf = strUni.replace(
+      /[\u0080-\u07ff]/g,  // U+0080 - U+07FF => 2 bytes 110yyyyy, 10zzzzzz
+      function(c) { 
+        var cc = c.charCodeAt(0);
+        return String.fromCharCode(0xc0 | cc>>6, 0x80 | cc&0x3f); }
+    );
+  strUtf = strUtf.replace(
+      /[\u0800-\uffff]/g,  // U+0800 - U+FFFF => 3 bytes 1110xxxx, 10yyyyyy, 10zzzzzz
+      function(c) { 
+        var cc = c.charCodeAt(0); 
+        return String.fromCharCode(0xe0 | cc>>12, 0x80 | cc>>6&0x3F, 0x80 | cc&0x3f); }
+    );
+  return strUtf;
+}
+
+/**
+ * Decode utf-8 encoded string back into multi-byte Unicode characters
+ *
+ * @param {String} strUtf UTF-8 string to be decoded back to Unicode
+ * @returns {String} decoded string
+ */
+Utf8.decode = function(strUtf) {
+  // note: decode 3-byte chars first as decoded 2-byte strings could appear to be 3-byte char!
+  var strUni = strUtf.replace(
+      /[\u00e0-\u00ef][\u0080-\u00bf][\u0080-\u00bf]/g,  // 3-byte chars
+      function(c) {  // (note parentheses for precence)
+        var cc = ((c.charCodeAt(0)&0x0f)<<12) | ((c.charCodeAt(1)&0x3f)<<6) | ( c.charCodeAt(2)&0x3f); 
+        return String.fromCharCode(cc); }
+    );
+  strUni = strUni.replace(
+      /[\u00c0-\u00df][\u0080-\u00bf]/g,                 // 2-byte chars
+      function(c) {  // (note parentheses for precence)
+        var cc = (c.charCodeAt(0)&0x1f)<<6 | c.charCodeAt(1)&0x3f;
+        return String.fromCharCode(cc); }
+    );
+  return strUni;
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
