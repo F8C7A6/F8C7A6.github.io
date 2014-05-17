@@ -75,6 +75,9 @@
         $( "#go" ).click(function() {
           clueDecrypt();
         });
+        $('#banner').click(function(){
+          $('body').css('background-color','#F8C7A6'); //F8C7A6 is a color.
+        })
         function SHA256(s){
          
         	var chrsz   = 8;
@@ -197,7 +200,7 @@
       <style src='style.css'></style>
     </head>
     <title>F8C7A6</title>
-    <h1>F8C7A6</h1>
+    <div id=banner><h1>F8C7A6</h1></div>
     <div class='.n'>
       Hello. This is F8C7A6. You are obviously here for a reason. I assume you mean to use the decrypter (at the bottom of the page).
       <div id = 'newsdiv'>
