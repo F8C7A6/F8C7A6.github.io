@@ -25,6 +25,7 @@
     <script src='aes-ctr.js'></script>
     <script src='utf8.js'></script>
     <script src='base64.js'></script>
+    <script src='hash.js'></script>
     <style>
     *{
       font-family: 'Cousine';
@@ -56,6 +57,8 @@
         };
       
       function clueDecrypt(){
+        $('#hashout').text(hashed);
+        
         $("#outpsg").html($.parseHTML(Aes.Ctr.encrypt(msgs[$('#cluebox').val()],$('#keybox').val(),256)));
       }
       
@@ -199,8 +202,13 @@
     Hello. This is F8C7A6. You are obviously here for a reason. I assume you mean to use the decrypter (at the bottom of the page).
     <div id = 'newsdiv'>
       <h1>News</h1>
-      <div>
-        
+      <div class='news'>
+        <h2>17 MAY 1:25 PM</h2>
+        <div>
+          Hello. This is F8C7A6. We have decided to create a difficult puzzle that could help hunters find our identity. It simply involves this:
+          <div id=hashout>
+          </div>
+        </div>
       </div>
       <div class='news'>
         <h2>16 MAY 2014 4:25 PM</h2>
