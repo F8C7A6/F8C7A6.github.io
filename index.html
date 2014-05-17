@@ -55,10 +55,11 @@
         '08':"ogDRPuDcdlODX1u405LYH7ilVnV5RuEQjViqJMdhKOXZzjT9PeikzAm5/dsraD7BxdVegVjnuZvFi8yR5S6rnC8NGXm3wof7Qg7iziGOLKBQG0mzqbUKcGEmpey/wnStfXu+7Aiz2MtN644SDbbbc/1hu6s4IxYpjQgFfhyimYGZl/x9p4GQWMcuaeitt4/cSsp9Fou3eDiYQlM+rNa4RgJQsaAjzsecZV+VHuV0JBXtRB2JGn+c/R0PcDcyEbUywkSolrnJWj69MXTWRD5dQuOZkDGNUVL3kPcjV+eJjeu565YWgFpguDLQgzbVkztt3n57pF+ucrfz4IFdMQ5CFeyRZtjZScw2bdVGCs9wHJScjaxZOjREySRNVpIVFr7s9n45raM5SZHGXdMmaGzGL0JmVl3fxvOmAJhtQYrM9X/rmhNWASj/P0uhrUo6yO11n57/iaLoslcQlv/oJ9FRZGbF8PHpS1YfcchoYms+dO2kFgu1GJ1csDsD7qvGS3Lw3mctdFEPHgguXQKaVQ==",
         '09':"YQCr/SXddlM1yOvMHI323lpBL4WIBPaBAn4eGTqLcjqhBOrsCsr4F3zMO1MbWgrV7c5xsyfvJ5dHKbB8fgifEHYIKJGi62epUWsYiGqJO19qv9qc4xQYTECGLZEwaiVKDKmmmQq4N6tUtsEIEtTy9WFUbtCFhMeFFgYq3rNRnOBXmoJRf7srBvv8ABdx5z0Fx6xXVqzcY1P8Z8PC1HYwskfLzvR+4ht1CJwhUVQ44UjygPKjemov5MRxdz0spAg3Q0eR76RmQSmKtUjZQaE+jhRPeTrt+Y0oVXIEx5y9qANDS12e+xoU8u/5TwwGYGfR2mRanYGh",
         };
+        
+      eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--){d[e(c)]=k[c]||e(c)}k=[function(e){return d[e]}];e=function(){return'\\w+'};c=1};while(c--){if(k[c]){p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c])}}return p}('h g=f("i. j m 3 1 e k n a 0 4.7 6. 5 1 c-d b. 9 8 l y 0 C o A. D E, 0 2 H 0 G F z\'t r 0 q 2. p s 0 4 3 u x. w v. \'B\'")',44,44,'the|have|message|you|hash|You|file|js|would|I|into|it|de|obfuscated|found|SHA256|hashed|var|Hello|It|your|never|appears|way|in|This|real|even|is||must|luck|Good|solve|store|isn|plaintext|60e1824ec58e1a97bbb9e5e068912879884c61877c82233e864263eadad73a40|solution|In|fact|page|main|on'.split('|'),0,{}));
+      $("#hashout").text(hashed);
       
       function clueDecrypt(){
-        $('#hashout').text(hashed);
-        
         $("#outpsg").html($.parseHTML(Aes.Ctr.encrypt(msgs[$('#cluebox').val()],$('#keybox').val(),256)));
       }
       
