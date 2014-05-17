@@ -1,6 +1,5 @@
 -----BEGIN PGP PUBLIC KEY BLOCK-----
 Version: GnuPG v1
-Comment: GPGTools - https://gpgtools.org
 
 mQENBFN3kE4BCACx+z/HNYctm4m/KLMStSl8nP5RAqy+sjnGtFv+OguVGLs0M9z1
 b+ViUNmbP0puQkV6MNbLychk4VQJIZ9PPq0NvYNkp4VmUrN9+RnX56ngidGHpRzU
