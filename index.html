@@ -147,6 +147,8 @@
     
     var ats = "OgL56cakflMrXf6Jj7LoXvDCM+Uu3RRdnb7KD/8RH7hJasJEwMao7wxMhjHyOgC6oCDVse8bMSUjWYtyv8vIA3doBQAxIJPdNzIdntxWbZvIuYc=";
 
+    function newKey(){test='';for(var i=0;i<20;i++){test += parseInt(Math.floor(Math.random()*9),16)}}
+
     function clueDecrypt() {
         $('#outpsg').html($.parseHTML((Aes.Ctr.decrypt(msgs[$('#cluebox').val()], $('#keybox').val(), 256))));
     }
