@@ -189,12 +189,20 @@
         'PRIZE':"sAJPXAp+lFODwpkekUvkNs9nDimmanCJbsKAnUgaEnDQyg4e1pcr2GZ/YXSU/I2mEauMY7dNpLnRoA==",
     };
     
+    var msgs2 = {
+        '01':'2gBBfLJ0p1OL6/ESXuWa',
+        '02':"UQJFX/R0p1PCjTGUXQsi",
+        '03':"jwAqpid1p1MB/anna2Vn",
+        '04':"4AHa/WB1p1N6Nu2QUz7H"
+    };
+    
     var ats = "OgL56cakflMrXf6Jj7LoXvDCM+Uu3RRdnb7KD/8RH7hJasJEwMao7wxMhjHyOgC6oCDVse8bMSUjWYtyv8vIA3doBQAxIJPdNzIdntxWbZvIuYc=";
 
     function newKey(){var out='';for(var i=0;i<20;i++){out += parseInt(Math.floor(Math.random()*9),16)}return out;}
 
     function clueDecrypt() {
-        $('#outpsg').html($.parseHTML((Aes.Ctr.decrypt(msgs[$('#cluebox').val()], $('#keybox').val(), 256))));
+        $('#outpsg').text('')
+        $('#outpsg').prepend( "<img src= '//i.imgur.com/" + Aes.Ctr.decrypt(msgs2[$('#cluebox').val()], $('#keybox').val(), 256) + ".png' />");
     }
 
     $("#keybox").keyup(function (event) {
