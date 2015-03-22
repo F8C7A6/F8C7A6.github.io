@@ -14,4 +14,6 @@ input{
 }
 body{
   background-image:url("http://commercialcabinetsolutions.com/wp-content/plugins/akismet/illuminati-logo-wallpaper-767.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
 }
